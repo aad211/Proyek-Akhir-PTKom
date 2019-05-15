@@ -37,7 +37,8 @@ FILE *c;
 int login=0, pinjam; //untuk default saat mulai aplikasi dia belum login
 
 int  arrow_menu();
-void header();
+void judul();
+void judul_menu();
 void menu_login_daftar();
 void login_logout();
 void daftar();
@@ -63,6 +64,8 @@ void cek_buku_full();
 void cek_rak();
 void cek_rak_full();
 
+void tiktik();
+
 //---------------------------------------------------------------------------------------------------------------//
 //                                                                                                               //
 //                                    --------------------------------------                                     //
@@ -72,19 +75,19 @@ void cek_rak_full();
 //---------------------------------------------------------------------------------------------------------------//
 
 int main (){ 
-printf("\n\n\t\t           .--.                   .---.\n");
-printf("\t\t       .---|__|           .-.     |~~~|\n");
-printf("\t\t    .--|===|--|_          |_|     |~~~|--.\n");
-printf("\t\t    |  |===|  |'\\     .---!~|  .--|   |--|\n");
-printf("\t\t    |  |   |  |.'\\    |===| |--|  |   |  |\n");
-printf("\t\t    |  |   |  |\\.'\\   |   | |__|  |   |  |\n");
-printf("\t\t    |  |   |  | \\  \\  |===| |==|  |   |  |\n");
-printf("\t\t    |  |   |__|  \\.'\\ |   |_|__|  |~~~|__|\n");
-printf("\t\t    |  |===|--|   \\.'\\|===|~|--|  |~~~|--|\n");
-printf("\t\t    ^--^---.--^    `-'`---^-^--^--^---'--'	\n");
-	printf("\n\n\t\t\tSelamat datang di Pinjam Yuk,");
-	printf("\n\t\taplikasi perpustakaan online yang terintegrasi");
-	printf("\n\t\t   dengan banyak perpustakaan di Indonesia\n\n\n\n\t\t\t");
+printf("\n\n\t\t\t\t\t       .--.                   .---.\n");
+printf("\t\t\t\t\t   .---|__|           .-.     |~~~|\n");
+printf("\t\t\t\t\t.--|===|--|_          |_|     |~~~|--.\n");
+printf("\t\t\t\t\t|  |===|  |'\\     .---!~|  .--|   |--|\n");
+printf("\t\t\t\t\t|  |   |  |.'\\    |===| |--|  |   |  |\n");
+printf("\t\t\t\t\t|  |   |  |\\.'\\   |   | |__|  |   |  |\n");
+printf("\t\t\t\t\t|  |   |  | \\  \\  |===| |==|  |   |  |\n");
+printf("\t\t\t\t\t|  |   |__|  \\.'\\ |   |_|__|  |~~~|__|\n");
+printf("\t\t\t\t\t|  |===|--|   \\.'\\|===|~|--|  |~~~|--|\n");
+printf("\t\t\t\t\t^--^---.--^    `-'`---^-^--^--^---'--'	\n");
+printf("\n\n\t\t\t\t\t    Selamat datang di Pinjam Yuk,");
+printf("\n\t\t\t\t    aplikasi perpustakaan online yang terintegrasi");
+	printf("\n\t\t\t\t       dengan banyak perpustakaan di Indonesia\n\n\n\n\t\t\t\t\t    ");
 	system("pause");
 	menu();
 }
@@ -115,67 +118,132 @@ printf("\t\t    ^--^---.--^    `-'`---^-^--^--^---'--'	\n");
 
 int arrow_menu(int banyak_menu, char *list_menu[banyak_menu+2]){
 	int pilih=0;
+	int z=2;
 	banyak_menu+=2;
-	for (i=banyak_menu-1; i>=0; i--){
-		list_menu[i]=list_menu[i-2];
-	}
-	
-	if (login==1){
-		list_menu[0]="Main menu\t\t\t\t\t\t\t\t\t\t\t\t      ";
-		list_menu[1]="Logout\n\n";
-	}
-	else {
-		list_menu[0]="Main menu\t\t\t\t\t\t\t\t\t\t\t\t";
-		list_menu[1]="Login/Daftar\n\n";
-	}
-	
-	while (1) {
-	  	system("cls");
-	  	for (i=0; i<banyak_menu; i++){
-			if (pilih==i){printf("-> ");}
-			else {printf("   ");}
-			if (i>1){
-				printf("%s\n", list_menu[i]);
-			}
-			else {
-				//printf("\033[1;31m");
-				printf("%s", list_menu[i]);
-				//printf("\033[0m");
-			}
+	if (z==1){//mainmenu
+		pilih=2;
+		for (i=banyak_menu-1; i>=0; i--){
+			list_menu[i]=list_menu[i-2];
 		}
-	    switch ( getch() ) {
-	    case '\r': //enter
-	    	if (pilih==0){
-	    		menu();
-			}
-   			else if (pilih==1){
-   				if (login==0){
-   					menu_login_daftar();
+		
+		if (login==1){
+			list_menu[0]="Main menu\t\t\t\t\t\t\t\t\t\t\t\t      ";
+			list_menu[1]="Logout\n\n";
+		}
+		else {
+			list_menu[0]="Main menu\t\t\t\t\t\t\t\t\t\t\t\t";
+			list_menu[1]="Login/Daftar\n\n";
+		}
+		
+		while (1) {
+		  	system("cls");
+		  	judul();
+		  	judul_menu();
+		  	for (i=0; i<banyak_menu; i++){
+				if (pilih==i){printf("--> ");}
+				else {printf("   ");}
+				if (i>1){
+					printf("%s\n", list_menu[i]);
 				}
-   				login_logout();
+				else {
+					//printf("\033[1;31m");
+					printf("%s", list_menu[i]);
+					//printf("\033[0m");
+				}
 			}
-   			else {
-	    		for (i=0; i<banyak_menu; i++){
-					if (pilih==i){
-		    			return i-2;
+		    switch ( getch() ) {
+		    case '\r': //enter
+		    	if (pilih==0){
+		    		menu();
+				}
+	   			else if (pilih==1){
+	   				if (login==0){
+	   					menu_login_daftar();
+					}
+	   				login_logout();
+				}
+	   			else {
+		    		for (i=0; i<banyak_menu; i++){
+						if (pilih==i){
+			    			return i-2;
+						}
 					}
 				}
+			case 72: //arrow atas
+	    		pilih--;
+	    		if (pilih<0){
+	    			pilih=banyak_menu-1;
+				}
+				break;
+			case 80: //arrow bawah
+				pilih++;
+				if (pilih>=banyak_menu){
+					pilih=0;
+				}
+				break;
+			case 27:
+				printf("terima kasih :)");
+				exit(0);
 			}
-		case 72: //arrow atas
-    		pilih--;
-    		if (pilih<0){
-    			pilih=banyak_menu-1;
+		}
+	}
+	else if (z==2){//submenu
+		pilih=0;
+		//for (i=banyak_menu-1; i>=0; i--){
+		//	list_menu[i]=list_menu[i-2];
+	
+		while (1) {
+		  	system("cls");
+		  	judul();
+		  	judul_menu();
+		  	for (i=0; i<banyak_menu; i++){
+				if (pilih==i){printf("--> ");}
+				else {printf("   ");}
+				if (i<banyak_menu-2){
+					printf("%s\n", list_menu[i]);
+				}
+				else {
+					//printf("\033[1;31m");
+					printf("%s", list_menu[i]);
+					//printf("\033[0m");
+				}
+				if (pilih==banyak_menu-2){
+					list_menu[banyak_menu-2]="Back\t\t\t\t\t\t\t\t\t\t\t\t";
+					list_menu[banyak_menu-1]="Main Menu\n\n";
+				}
+				else {
+					list_menu[banyak_menu-2]="Back\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
+					list_menu[banyak_menu-1]="Main Menu\n\n";
+				}
 			}
-			break;
-		case 80: //arrow bawah
-			pilih++;
-			if (pilih>=banyak_menu){
-				pilih=0;
+		    switch ( getch() ) {
+		    case '\r': //enter
+		    	if (pilih==banyak_menu-1){
+		    		menu();
+				}
+	   			else {
+		    		for (i=0; i<banyak_menu; i++){
+						if (pilih==i){
+			    			return i;
+						}
+					}
+				}
+			case 72: //arrow atas
+	    		pilih--;
+	    		if (pilih<0){
+	    			pilih=banyak_menu-1;
+				}
+				break;
+			case 80: //arrow bawah
+				pilih++;
+				if (pilih>=banyak_menu){
+					pilih=0;
+				}
+				break;
+			case 27:
+				printf("terima kasih :)");
+				exit(0);
 			}
-			break;
-		case 27:
-			printf("terima kasih :)");
-			exit(0);
 		}
 	}
 }
@@ -189,7 +257,6 @@ int arrow_menu(int banyak_menu, char *list_menu[banyak_menu+2]){
 //------------------------------------------//
 
 void menu(){
-	header();
 	char *menu_utama[7];
 	menu_utama[0]="1. mengubah data perpustakaan\n";
 	menu_utama[1]="2. mencari data buku\n";
@@ -322,6 +389,8 @@ void lihat(){
 		case 3:
 			cek_rak_full();
 			lihat();
+		case 4:
+			menu();
 	}
 }
 
@@ -1051,13 +1120,30 @@ void salah(){
 	menu();
 }
 
-void header()
+void judul()
 {
 	printf("\t\t\t================================================================\n");
     printf("\t\t\t||                                                            ||\n");
     printf("\t\t\t||                                                            ||\n");
-    printf("\t\t\t||                     DIGITAL PHONE BOOK                     ||\n");
+    printf("\t\t\t||                       PINJAM YUK!!                         ||\n");
     printf("\t\t\t||                                                            ||\n");
-    printf("\t\t\t||                                                        v4.0||\n");
-    printf("\t\t\t================================================================\n\n");
+    printf("\t\t\t||                                                            ||\n");
+    printf("\t\t\t================================================================\n");
+}
+
+void judul_menu()
+{
+	printf("\t\t\t\t      =================================\n");
+    printf("\t\t\t\t      |           Menu Utama          |\n");
+    printf("\t\t\t\t      =================================\n\n");
+}
+
+void tiktik(char* x, int y)
+{
+	for(i=0;i<strlen(x);i++)
+	{
+		printf("%c",x[i]);
+		Sleep(y);
+		
+	}
 }
