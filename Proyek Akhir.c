@@ -9,7 +9,6 @@ int rak=0; //untuk mencatat banyaknya rak*/
 int buku=0; //banyaknya buku saat ini*/
 int lembar;
 int data_user=0; //untuk default saat mulai aplikasi dia belum login
-
 char peminjam[100]; //array untuk daftar peminjam, 2 dimensi, pertama isinya nama peminjam, di nama peminjam diisi dengan judul buku yang dipinjam
 char nama_rak[100]; //pertama index rak, kedua nama rak, isinya nama rak perkarakter
 char nama_buku[100]; //pertama index buku, kedua judul buku, isinya judul buku perkarakter
@@ -334,7 +333,7 @@ void menu(){
 	menu_utama[3]="4. mengembalikan buku\n";
 	menu_utama[4]="5. melihat seluruh data di perpustakaan\n";
 	menu_utama[5]="6. melihat data pinjaman\n";
-	menu_utama[6]="\033[1;31mexit program (ESC)\033[0m\n";
+	menu_utama[6]="\033[1;31mexit program (ESC)\033[0m";
 	switch (arrow_menu(7, menu_utama, 1)){
    		case 0:
 			menu_buku_rak();
@@ -524,7 +523,10 @@ void login_logout(){
 				fclose(b);
 				data_user=i; //menyimpan index data user mulai dari 1, karena 0 menandakan dia tidak ada data dan tidak login, jadi data_user adalah index yang menandakan posisi akun dia
 				system("cls");
-				printf("Selamat login anda berhasil!\nSelamat mengeksplor hal lebih :)\n");
+				printf("Selamat login anda berhasil!\nSelamat mengeksplor hal lebih :)\n\n");
+				printf("\033[1;31m");
+				printf("Anda akan dialihkan ke menu utama secara otomatis\n\n");
+				printf("\033[0m");
 				system("pause");
 				menu(); //kembali ke menu
 			}
@@ -1380,6 +1382,7 @@ void cek_rak_full(){
 //---------------------------------------------------------------------------------------------------------------//
 
 void minjam(){
+	system("cls");
 	if (data_user!=0){
 		printf("Silahkan masukkan judul buku yang ingin anda pinjam (maksimal peminjaman hanya 2 buku): ");
 		scanf("%[^\n]%*c", cari);
@@ -1404,9 +1407,9 @@ void minjam(){
 		}
 		b = fopen("nama buku.bin", "r");
 		c = fopen("simpan", "w");
-		a = 0;
+		j = 0;
 		while (fscanf(b, "%d %d %d %d %[^\n]%*c\n", &pinjam, &waktu, &i, &lembar, nama_buku)!=EOF){
-			if (strcmp(cari, nama_buku)==0 && pinjam==0){
+			if (strcasecmp(cari, nama_buku)==0 && pinjam==0){
 				waktu = time(NULL);
 				waktu += 604800; //waktu sekarang ditambah dengan 7 hari
 				char *pilih_menu[3];
@@ -1418,7 +1421,7 @@ void minjam(){
 				switch (arrow_menu(3, pilih_menu, 3)){
 					case 0:
 						pinjam = data_user;
-						a = 1;
+						j = 1;
 						break;
 					case 1:
 						fclose(b);
@@ -1427,11 +1430,11 @@ void minjam(){
 						menu();
 				}
 			}
-			else if (strcmp(cari, nama_buku)==0 && pinjam!=0){
+			else if (strcasecmp(cari, nama_buku)==0 && pinjam!=0){
 				fclose(b);
 				fclose(c);
 				char *pilih_menu[3];
-				char aad [100];
+				char aad [500];
 				snprintf(aad, sizeof(aad), "Maaf buku %s sedang dipinjam hingga tanggal %d bulan %d, apakah anda ingin meminjam buku yang lain?", cari, localtime(&waktu)->tm_mday, localtime(&waktu)->tm_mon);
 				pilih_menu[0]=aad;
 				pilih_menu[1]="YA (meminjam buku lain)";
@@ -1448,7 +1451,7 @@ void minjam(){
 		}
 		fclose(c);
 		fclose(b);
-		if (a==0){
+		if (j==0){
 			//tidak ditemukan bukunya
 			remove("simpan");
 			char *pilih_menu[5];
@@ -1478,9 +1481,24 @@ void minjam(){
 		}
 		remove("nama buku.bin");
 		rename("simpan", "nama buku.bin");
-		printf("selamat anda berhasil meminjam buku %s, waktu peminjaman adalah 1 minggu, harap mengembalikan buku maksimal pada tanggal %d", cari);
-		printf("apakah anda ingin meminjam buku lagi?");
-
+		system("cls");
+		waktu = time(NULL);
+		waktu += 604800; //waktu sekarang ditambah dengan 7 hari
+		printf("selamat anda berhasil meminjam buku %s, waktu peminjaman adalah 1 minggu\nharap mengembalikan buku maksimal pada tanggal %d bulan %d\n\n", cari, localtime(&waktu)->tm_mday, localtime(&waktu)->tm_mon);
+		if (a==0){
+			system("pause");
+			char *pilih_menu[3];
+			pilih_menu[0]="apakah anda ingin meminjam buku lagi?";
+			pilih_menu[1]="YA (meminjam buku lagi)";
+			pilih_menu[2]="TIDAK (kembali ke menu utama) (ESC)";
+			switch (arrow_menu(3, pilih_menu, 3)){
+				case 0:
+					minjam();
+				case 1:
+					menu();
+			}
+		}
+		else {printf("\033[1;31m");printf("Anda akan dialihkan ke menu utama secara otomatis\n\n");printf("\033[0m");system("pause");menu();}
 	}
 	else {
 		//pilihan untuk login atau daftar atau ke menu
@@ -1512,7 +1530,61 @@ void minjam(){
 }
 
 void balikin(){
-	
+	char aad [100];
+	char ada [100];
+	char *pilih_menu[4];
+	pilih_menu[0]="Buku apa yang ingin anda kembalikan?";
+	a = 1;
+	b = fopen("nama buku.bin", "r");
+	while (fscanf(b, "%d %d %d %d %[^\n]%*c\n", &pinjam, &waktu, &i, &lembar, nama_buku)!=EOF){
+		if (data_user==pinjam){
+			snprintf(aad, sizeof(aad), "%d. %s", a, nama_buku);
+			pilih_menu[a]=aad;
+			a++;
+			break;
+		}
+	}
+	fclose(b);
+	b = fopen("nama buku.bin", "r");
+	while (fscanf(b, "%d %d %d %d %[^\n]%*c\n", &pinjam, &waktu, &i, &lembar, nama_buku)!=EOF){
+		snprintf(ada, sizeof(ada), "%d. %s", a-1, nama_buku);
+		if (data_user==pinjam&&strcmp(ada, pilih_menu[a-1])!=0){
+			snprintf(ada, sizeof(ada), "%d. %s", a, nama_buku);
+			pilih_menu[a]=ada;
+			a++;
+			break;
+		}
+	}
+	fclose(b);
+	char aa [100];
+	snprintf(aa, sizeof(aa), "%d. kembali ke menu utama (ESC)\n", a);
+	pilih_menu[a]=aa;
+	j = arrow_menu(a+1, pilih_menu, 3);
+	if (j==a-1){menu();}
+	a = 0;
+	b = fopen("nama buku.bin", "r");
+	c = fopen("simpan", "w");
+	while (fscanf(b, "%d %d %d %d %[^\n]%*c\n", &pinjam, &waktu, &i, &lembar, nama_buku)!=EOF){
+		if (data_user==pinjam){
+			if(j==a){
+				pinjam = 0;
+				waktu = 0;
+			}
+			a++;
+		}
+		fprintf(c, "%d %d %d %d %s\n", pinjam, waktu, i, lembar, nama_buku);
+	}
+	fclose(b);
+	fclose(c);
+	remove("nama buku.bin");
+	rename("simpan", "nama buku.bin");
+	system("cls");
+	printf("Selamat anda berhasil mengembalikan buku!\n\n");
+	printf("\033[1;31m");
+	printf("Anda akan dialihkan ke menu utama secara otomatis\n\n");
+	printf("\033[0m");
+	system("pause");
+	menu();
 }
 
 void lihat_pinjam(){
