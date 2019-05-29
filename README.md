@@ -1,20 +1,4 @@
 # Proyek-Akhir
 
-cek baju
-jika dia belum pernah mengisi
-  menu isi data baru
-  nama baju
-  tahun beli
- 
-jika dia sudah pernah mengisi, masuk (menu utama)
-
-(menu utama)
-menyimpan hari pada saat dia menggunakan aplikasi
-jika dia baru pertama kali menggunakan aplikasi tersebut di hari itu
-  meminta input masukkan data tentang data dia di hari itu
-  data berat badan
-  data lainnya
-  memasukkan data
-opsi terakhir
-  hapus semua data yang ada
+Pijuk! adalah program peminjaman buku online dari perpustakaan mitra Pijuk!. Untuk menggunakan program ini, user harus mendaftar akun dan/atau login terlebih dahulu untuk menggunakan program ini. Beberapa fitur Pijuk! diantaranya:  peminjaman dan pengembalian buku, status buku, pendataan buku dan rak, pencarian buku, sistem akun dengan permission berbeda (biasa/admin), dan riwayat peminjaman.
 
